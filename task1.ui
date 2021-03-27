@@ -132,17 +132,22 @@
                         <widget class="QComboBox" name="comboBox_Image1_2">
                          <item>
                           <property name="text">
-                           <string>1</string>
+                           <string>Global_threshold_v=127</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>2</string>
+                           <string>Global_binary_ostu</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>3</string>
+                           <string>Local_threshold</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Gray_image</string>
                           </property>
                          </item>
                          <item>
