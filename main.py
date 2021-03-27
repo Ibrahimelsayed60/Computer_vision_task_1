@@ -121,7 +121,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.image = self.salt_and_pepper_noise(self.img)
         self.ui.image2.setPixmap(QPixmap(self.display(self.image)))
         self.filtered_image()
-        self.threshold_image()
+        
 
     def filtered_image(self):
         if self.ui.comboBox_Image1_3.currentIndex() == 0:
@@ -190,6 +190,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         elif self.ui.comboBox_Image1_2.currentIndex() == 3:
             out = self.Transormation_to_grayScale(self.img2)
             self.ui.image4.setPixmap(QPixmap(self.display(out)))
+        else:
+            pass
         
 
 
