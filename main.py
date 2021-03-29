@@ -14,11 +14,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         path = 'lena.jpg'
         self.img = cv2.imread(path, 0)
         self.img2 = cv2.imread(path)
+        self.img3 = cv2.imread(path,0)
+        self.img4 = cv2.imread('test.jpg',0)
+        self.img5 = cv2.imread('test2.jpg',0)
         self.ui.image1.setPixmap(QPixmap(path))
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
-        #self.threshold_image()
+        self.Hybrid_image(self.img4,self.img5,0.3)
 
     def convolution(self, image, kernel, average=False, verbose=False):
         if len(image.shape) == 3:
@@ -139,8 +142,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
 ########################Threshold################################
     def global_threshold_v_127(self,img):
-        thresh = 127
+        thresh = 100
         binary = img > thresh
+        for i in range(0,len(binary),1):
+            for j in range(0,len(binary),1):
+                if binary[i][j] == True:
+                    binary[i][j] = 256
+                else:
+                    binary[i][j]=0
+
         return binary
 
     def local_treshold(self,input_img):
@@ -179,9 +189,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return gray
 
     def threshold_image(self):
-        if self.ui.comboBox_Image1_2.currentIndex() == 0:
-            out_put = (self.global_threshold_v_127(self.img))
-            print(type(out_put[0][0]))
+        if self.ui.comboBox_Image1_2.currentIndex() == 1:
+            out_put = (self.global_threshold_v_127(self.img3))
+            out_put= np.array(out_put).reshape(self.img.shape[1],self.img.shape[0]).astype(np.bool_)
             new_image = QtGui.QImage(out_put, out_put.shape[0],out_put.shape[1],QtGui.QImage.Format.Format_Grayscale16)
             self.ui.image4.setPixmap(QPixmap(new_image))
         elif self.ui.comboBox_Image1_2.currentIndex() == 2:
@@ -192,7 +202,42 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.image4.setPixmap(QPixmap(self.display(out)))
         else:
             pass
-        
+
+
+    
+    #######################Histograms#################################
+    def cumulative_histogram(self,input_color_image):
+        pass
+
+    ############################Hybrid Image###########################  
+    def laplacian_image(self,input_image):
+        input_image -= np.amin(input_image) #map values to the (0, 255) range
+        A =input_image* 255.0/np.amax(input_image)
+
+        #Kernel for negative Laplacian
+        kernel = np.ones((3,3))*(-1)
+        kernel[1,1] = 8
+
+        #Convolution of the image with the kernel:
+        Lap = self.convolution(A, kernel)
+
+        return Lap
+
+
+    def Hybrid_image(self,first_image,second_image,alpha):
+        if first_image.shape[0] == second_image.shape[0] and first_image.shape[1] == second_image.shape[1]:
+            laplace_image = self.laplacian_image(first_image)
+            gaussian_image = self.gaussian_filter(second_image)
+            Hybrid_img = alpha * laplace_image + (1 - alpha) * gaussian_image
+            img = np.array(Hybrid_img).reshape(self.img4.shape[1],self.img4.shape[0]).astype(np.uint8)
+            img = QtGui.QImage(img, img.shape[0],img.shape[1],QtGui.QImage.Format_Grayscale8)
+            
+            self.ui.label.setPixmap(QPixmap(img))
+
+        else:
+            pass
+
+
 
 
 def main():
