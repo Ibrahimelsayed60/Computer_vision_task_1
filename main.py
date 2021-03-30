@@ -28,7 +28,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
+        self.ui.comboBox.currentIndexChanged[int].connect(self.histogram_selection)
         self.Hybrid_image(self.img4,self.img5,0.3)
+        #self.get_histogram(self.img3,256)
 
     def convolution(self, image, kernel, average=False, verbose=False):
         if len(image.shape) == 3:
@@ -214,8 +216,50 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     
     #######################Histograms#################################
-    def cumulative_histogram(self,input_color_image):
-        pass
+    def cumulative_histogram(self,hist_input):
+        a= iter(hist_input)
+        b = [next(a)]
+        for i in a:
+            b.append(b[-1] + i)
+        return np.array(b)
+        # pg.plot
+
+
+    def get_histogram(self, image_input,bins):
+        # array with size of bins, set to zeros
+        histogram = np.zeros(bins)
+        
+        # loop through pixels and sum up counts of pixels
+        for pixel in image_input:
+            histogram[pixel] += 1
+        
+        y=np.linspace(0,np.max(histogram))
+        # return our final result
+        return histogram
+        # my_img = pg.BarGraphItem(x=histogram,height=image_input.flatten(),width=0.6, brush='r')
+        # self.ui.widget.addItem(my_img)
+
+    def histogram_selection(self):
+        if self.ui.comboBox.currentIndex() == 0:
+            cum_curve = self.cumulative_histogram(self.get_histogram(self.img3,256))
+            #curve = pg.plot(cum_curve)
+            self.ui.widget.addItem(cum_curve.all())
+        elif self.ui.comboBox.currentIndex() == 1:
+            red_hist = self.get_histogram(self.img2[:,:,0],256)
+            my_img = pg.BarGraphItem(x=red_hist,height=self.img2[:,:,0].flatten(),width=0.6, brush='r')
+            self.ui.widget.addItem(my_img)
+        elif self.ui.comboBox.currentIndex() == 2:
+            green_hist = self.get_histogram(self.img2[:,:,1],256)
+            my_img = pg.BarGraphItem(x=green_hist,height=self.img2[:,:,1].flatten(),width=0.6, brush='g')
+            self.ui.widget.addItem(my_img)
+        elif self.ui.comboBox.currentIndex() == 3:
+            blue_hist = self.get_histogram(self.img2[:,:,2],256)
+            my_img = pg.BarGraphItem(x=blue_hist,height=self.img2[:,:,2].flatten(),width=0.6, brush='g')
+            self.ui.widget.addItem(my_img)
+        else:
+            pass
+
+
 
     ############################Hybrid Image###########################  
     def laplacian_image(self,input_image):

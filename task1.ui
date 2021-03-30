@@ -242,7 +242,28 @@
                      <item row="0" column="0">
                       <layout class="QHBoxLayout" name="horizontalLayout_3">
                        <item>
-                        <widget class="QComboBox" name="comboBox"/>
+                        <widget class="QComboBox" name="comboBox">
+                         <item>
+                          <property name="text">
+                           <string>Cumulative_curve</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Red_channel_histogram</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Green_channel_histogram</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Blue_channel_histogram</string>
+                          </property>
+                         </item>
+                        </widget>
                        </item>
                        <item>
                         <widget class="QLabel" name="label_4">
