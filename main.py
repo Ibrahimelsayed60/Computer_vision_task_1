@@ -5,6 +5,7 @@ import sys
 import random
 import cv2
 import numpy as np
+import pyqtgraph as pg
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -13,10 +14,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         path = 'lena.jpg'
         self.img = cv2.imread(path, 0)
-        self.img2 = cv2.imread(path)
-        self.img3 = cv2.imread(path,0)
-        self.img4 = cv2.imread('test.jpg',0)
-        self.img5 = cv2.imread('test2.jpg',0)
+        self.img2 = cv2.rotate(cv2.imread(path),cv2.ROTATE_90_CLOCKWISE)
+        self.img3 = cv2.rotate(cv2.imread(path,0),cv2.ROTATE_90_CLOCKWISE)
+        self.img4 = cv2.rotate(cv2.imread('test.jpg',0),cv2.ROTATE_90_CLOCKWISE)
+        self.img5 = cv2.rotate(cv2.imread('test2.jpg',0),cv2.ROTATE_90_CLOCKWISE)
+        ###########To remove axis###############
+        self.ui.widget_2.getPlotItem().hideAxis('bottom')
+        self.ui.widget_2.getPlotItem().hideAxis('left')
+        self.ui.widget_3.getPlotItem().hideAxis('bottom')
+        self.ui.widget_3.getPlotItem().hideAxis('left')
+
         self.ui.image1.setPixmap(QPixmap(path))
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
@@ -191,15 +198,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def threshold_image(self):
         if self.ui.comboBox_Image1_2.currentIndex() == 1:
             out_put = (self.global_threshold_v_127(self.img3))
-            out_put= np.array(out_put).reshape(self.img.shape[1],self.img.shape[0]).astype(np.bool_)
-            new_image = QtGui.QImage(out_put, out_put.shape[0],out_put.shape[1],QtGui.QImage.Format.Format_Grayscale16)
-            self.ui.image4.setPixmap(QPixmap(new_image))
+            my_img = pg.ImageItem(out_put)
+            self.ui.widget_2.addItem(my_img)
         elif self.ui.comboBox_Image1_2.currentIndex() == 2:
-            out = self.local_treshold(self.img)
-            self.ui.image4.setPixmap(QPixmap(self.display(out)))
+            out = self.local_treshold(self.img3)
+            my_img = pg.ImageItem(out)
+            self.ui.widget_2.addItem(my_img)
         elif self.ui.comboBox_Image1_2.currentIndex() == 3:
             out = self.Transormation_to_grayScale(self.img2)
-            self.ui.image4.setPixmap(QPixmap(self.display(out)))
+            my_img = pg.ImageItem(out)
+            self.ui.widget_2.addItem(my_img)
         else:
             pass
 
@@ -229,10 +237,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             laplace_image = self.laplacian_image(first_image)
             gaussian_image = self.gaussian_filter(second_image)
             Hybrid_img = alpha * laplace_image + (1 - alpha) * gaussian_image
-            img = np.array(Hybrid_img).reshape(self.img4.shape[1],self.img4.shape[0]).astype(np.uint8)
-            img = QtGui.QImage(img, img.shape[0],img.shape[1],QtGui.QImage.Format_Grayscale8)
-            
-            self.ui.label.setPixmap(QPixmap(img))
+            # img = np.array(Hybrid_img).reshape(self.img4.shape[1],self.img4.shape[0]).astype(np.uint8)
+            # img = QtGui.QImage(img, img.shape[0],img.shape[1],QtGui.QImage.Format_Grayscale8)
+            my_img = pg.ImageItem(Hybrid_img)
+            self.ui.widget_3.addItem(my_img)
 
         else:
             pass

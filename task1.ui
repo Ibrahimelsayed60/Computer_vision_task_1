@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>969</width>
-    <height>600</height>
+    <width>1110</width>
+    <height>815</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -132,12 +132,12 @@
                         <widget class="QComboBox" name="comboBox_Image1_2">
                          <item>
                           <property name="text">
-                           <string>Global_threshold_v=127</string>
+                           <string>Global_binary_ostu</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>Global_binary_ostu</string>
+                           <string>Global_threshold_v_127</string>
                           </property>
                          </item>
                          <item>
@@ -170,36 +170,42 @@
                     <property name="frameShadow">
                      <enum>QFrame::Raised</enum>
                     </property>
-                    <layout class="QGridLayout" name="gridLayout">
-                     <item row="0" column="1">
-                      <widget class="QLabel" name="image2">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="image1">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="2">
-                      <widget class="QLabel" name="image3">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="3">
-                      <widget class="QLabel" name="image4">
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
+                    <widget class="QWidget" name="layoutWidget">
+                     <property name="geometry">
+                      <rect>
+                       <x>12</x>
+                       <y>0</y>
+                       <width>991</width>
+                       <height>201</height>
+                      </rect>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_6">
+                      <item>
+                       <widget class="QLabel" name="image1">
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="image2">
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="image3">
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PlotWidget" name="widget_2" native="true"/>
+                      </item>
+                     </layout>
+                    </widget>
                    </widget>
                   </item>
                  </layout>
@@ -277,38 +283,24 @@
                     <property name="frameShadow">
                      <enum>QFrame::Raised</enum>
                     </property>
-                    <layout class="QGridLayout" name="gridLayout_6">
-                     <item row="0" column="0">
-                      <layout class="QHBoxLayout" name="horizontalLayout_4">
-                       <item>
-                        <layout class="QVBoxLayout" name="verticalLayout_6">
-                         <item>
-                          <widget class="QFrame" name="frame_13">
-                           <property name="frameShape">
-                            <enum>QFrame::StyledPanel</enum>
-                           </property>
-                           <property name="frameShadow">
-                            <enum>QFrame::Raised</enum>
-                           </property>
-                           <layout class="QHBoxLayout" name="horizontalLayout_5">
-                            <item>
-                             <widget class="QWidget" name="widget" native="true"/>
-                            </item>
-                            <item>
-                             <widget class="QLabel" name="label">
-                              <property name="text">
-                               <string/>
-                              </property>
-                             </widget>
-                            </item>
-                           </layout>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
+                    <widget class="QWidget" name="layoutWidget">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>-5</y>
+                       <width>991</width>
+                       <height>201</height>
+                      </rect>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_4">
+                      <item>
+                       <widget class="PlotWidget" name="widget" native="true"/>
+                      </item>
+                      <item>
+                       <widget class="PlotWidget" name="widget_3" native="true"/>
+                      </item>
+                     </layout>
+                    </widget>
                    </widget>
                   </item>
                  </layout>
@@ -332,13 +324,21 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>969</width>
+     <width>1110</width>
      <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QWidget</extends>
+   <header>pyqtgraph</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
