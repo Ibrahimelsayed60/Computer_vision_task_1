@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtGui import QPixmap
-from task1 import Ui_MainWindow
+from task import Ui_MainWindow
 import sys
 import random
 import cv2
@@ -189,25 +189,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     out_img[row,col] = 255
         return out_img
 
-    def Transormation_to_grayScale(self,input_image):
-        H,W = input_image.shape[:2]
-        gray = np.zeros((H,W), np.uint8)
-        for i in range(H):
-            for j in range(W):
-                gray[i,j] = np.clip(0.07 * input_image[i,j,0]  + 0.72 * input_image[i,j,1] + 0.21 * input_image[i,j,2], 0, 255)
-        return gray
+    
 
     def threshold_image(self):
-        if self.ui.comboBox_Image1_2.currentIndex() == 1:
+        if self.ui.comboBox_Image1_2.currentIndex() == 0:
             out_put = (self.global_threshold_v_127(self.img3))
             my_img = pg.ImageItem(out_put)
             self.ui.widget_2.addItem(my_img)
-        elif self.ui.comboBox_Image1_2.currentIndex() == 2:
+        elif self.ui.comboBox_Image1_2.currentIndex() == 1:
             out = self.local_treshold(self.img3)
-            my_img = pg.ImageItem(out)
-            self.ui.widget_2.addItem(my_img)
-        elif self.ui.comboBox_Image1_2.currentIndex() == 3:
-            out = self.Transormation_to_grayScale(self.img2)
             my_img = pg.ImageItem(out)
             self.ui.widget_2.addItem(my_img)
         else:
@@ -216,6 +206,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     
     #######################Histograms#################################
+    def Transormation_to_grayScale(self,input_image):
+        H,W = input_image.shape[:2]
+        gray = np.zeros((H,W), np.uint8)
+        for i in range(H):
+            for j in range(W):
+                gray[i,j] = np.clip(0.07 * input_image[i,j,0]  + 0.72 * input_image[i,j,1] + 0.21 * input_image[i,j,2], 0, 255)
+        return gray
+
     def cumulative_histogram(self,hist_input):
         a= iter(hist_input)
         b = [next(a)]
@@ -240,22 +238,35 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # self.ui.widget.addItem(my_img)
 
     def histogram_selection(self):
-        if self.ui.comboBox.currentIndex() == 0:
+        if self.ui.comboBox.currentIndex() == 4:
+            self.ui.widget.clear()
             cum_curve = self.cumulative_histogram(self.get_histogram(self.img3,256))
             #curve = pg.plot(cum_curve)
             self.ui.widget.addItem(cum_curve.all())
         elif self.ui.comboBox.currentIndex() == 1:
+            self.ui.widget.clear()
             red_hist = self.get_histogram(self.img2[:,:,0],256)
             my_img = pg.BarGraphItem(x=red_hist,height=self.img2[:,:,0].flatten(),width=0.6, brush='r')
             self.ui.widget.addItem(my_img)
         elif self.ui.comboBox.currentIndex() == 2:
+            self.ui.widget.clear()
             green_hist = self.get_histogram(self.img2[:,:,1],256)
             my_img = pg.BarGraphItem(x=green_hist,height=self.img2[:,:,1].flatten(),width=0.6, brush='g')
             self.ui.widget.addItem(my_img)
         elif self.ui.comboBox.currentIndex() == 3:
+            self.ui.widget.clear()
             blue_hist = self.get_histogram(self.img2[:,:,2],256)
             my_img = pg.BarGraphItem(x=blue_hist,height=self.img2[:,:,2].flatten(),width=0.6, brush='g')
             self.ui.widget.addItem(my_img)
+        elif self.ui.comboBox.currentIndex() == 0:
+            self.ui.widget.clear()
+            gray_image = self.Transormation_to_grayScale(self.img2)
+            my_img = pg.ImageItem(gray_image)
+            self.ui.widget.addItem(my_img)
+        elif self.ui.comboBox.currentIndex() ==5:
+            self.ui.widget.clear()
+            
+
         else:
             pass
 
