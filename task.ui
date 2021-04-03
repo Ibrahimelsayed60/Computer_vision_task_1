@@ -199,12 +199,38 @@
                </font>
               </property>
               <property name="text">
-               <string>Edge detection</string>
+               <string>Edge detection and Filters</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox_3"/>
+             <widget class="QComboBox" name="comboBox_3">
+              <item>
+               <property name="text">
+                <string>Sobel</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Prewitt</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Roberts</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>High Pass Filter</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Low Pass Filter</string>
+               </property>
+              </item>
+             </widget>
             </item>
            </layout>
           </item>
@@ -355,7 +381,7 @@
      <x>0</x>
      <y>0</y>
      <width>1164</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
