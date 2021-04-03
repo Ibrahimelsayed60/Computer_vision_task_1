@@ -6,6 +6,7 @@ import random
 import cv2
 import numpy as np
 import pyqtgraph as pg
+from matplotlib.image import imread
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -23,6 +24,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_2.getPlotItem().hideAxis('left')
         self.ui.widget_3.getPlotItem().hideAxis('bottom')
         self.ui.widget_3.getPlotItem().hideAxis('left')
+        self.ui.widget_4.getPlotItem().hideAxis('bottom')
+        self.ui.widget_4.getPlotItem().hideAxis('left')
 
         self.ui.image1.setPixmap(QPixmap(path))
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
@@ -30,6 +33,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
         self.ui.comboBox.currentIndexChanged[int].connect(self.histogram_selection)
         self.ui.comboBox_4.currentIndexChanged[int].connect(self.visualize_hybrid_image)
+        self.ui.comboBox_3.currentIndexChanged[int].connect(self.edge_detection_filter)
         #self.get_histogram(self.img3,256)
 
     def convolution(self, image, kernel, average=False, verbose=False):
@@ -126,6 +130,65 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 img_new[i, j]= temp[4]
         return img_new
 
+    def high_pass_filter(self,img):
+        row, col = img.shape
+        mask = np.zeros((row, col))
+        hpf = np.array([[-1,-1,-1],[0,0,0],[1,1,1]])
+        mask[20:23,20:23] = hpf
+        mask = np.fft.fftshift(np.fft.fft2(mask))
+        image = np.fft.fftshift(np.fft.fft2(img))
+        img_new = np.fft.ifft2(mask*image)
+        img_new = np.log(1+np.abs(img_new))
+        return img_new
+
+    def low_pass_filter(self, img):
+        row, col = img.shape
+        mask = np.zeros((row, col))
+        avgMask= np.ones((9,9))/81
+        mask[24:33,24:33] = avgMask
+        mask = np.fft.fftshift(np.fft.fft2(mask))
+        image = np.fft.fftshift(np.fft.fft2(img))
+        img_new = np.fft.ifft2(mask*image)
+        img_new = np.log(1+np.abs(img_new))
+        return img_new
+
+    def sobel(self,img):
+        row, col = img.shape
+        Gx = np.array([[1.0, 0.0, -1.0], [2.0, 0.0, -2.0], [1.0, 0.0, -1.0]])
+        Gy = np.array([[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]])
+        self.new_img = np.zeros([row, col]) 
+        for i in range(row - 2):
+            for j in range(col - 2):
+                gx = np.sum(np.multiply(Gx, img[i:i + 3, j:j + 3]))  # x direction
+                gy = np.sum(np.multiply(Gy, img[i:i + 3, j:j + 3]))  # y direction
+                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
+        self.img_new = self.new_img.astype(np.uint8)    
+        return self.img_new
+    def perwitt(self,img) :
+        row, col = img.shape
+        Gx = np.array([[1.0, 0.0, -1.0], [1.0, 0.0, -1.0], [1.0, 0.0, -1.0]])
+        Gy = np.array([[1.0, 1.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -1.0, -1.0]])
+        self.new_img = np.zeros([row, col]) 
+        for i in range(row - 2):
+            for j in range(col - 2):
+                gx = np.sum(np.multiply(Gx, img[i:i + 3, j:j + 3]))  # x direction
+                gy = np.sum(np.multiply(Gy, img[i:i + 3, j:j + 3]))  # y direction
+                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
+        self.img_new = self.new_img.astype(np.uint8)    
+        return self.img_new
+    def roberts(self,img):
+        row, col = img.shape
+        Gx = np.array([[1.0, 0.0], [0.0, -1.0]])
+        Gy = np.array([[0.0, -1.0], [1.0, 0.0]])
+        self.new_img = np.zeros([row, col]) 
+        for i in range(row - 2):
+            for j in range(col - 2):
+                gx = np.sum(np.multiply(Gx, img[i:i + 2, j:j + 2]))  # x direction
+                gy = np.sum(np.multiply(Gy, img[i:i + 2, j:j + 2]))  # y direction
+                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
+        self.img_new = self.new_img.astype(np.uint8)    
+        return self.img_new
+ 
     def noisy_image(self):
         if self.ui.comboBox_Image1.currentIndex() == 1:
             self.image = self.gaussian_noise(self.img)
@@ -147,7 +210,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def display(self, img):
             img = np.array(img).reshape(self.img.shape[1],self.img.shape[0]).astype(np.uint8)
             img = QtGui.QImage(img, img.shape[0] ,img.shape[1] ,QtGui.QImage.Format_Grayscale8)
-            return img
+            return img 
+    def edge_detection_filter(self):
+        if self.ui.comboBox_3.currentIndex() == 0:
+            output = self.sobel(self.image)
+        elif self.ui.comboBox_3.currentIndex() == 1:
+            output = self.perwitt(self.image)
+        elif self.ui.comboBox_3.currentIndex() == 2:
+            output = self.roberts(self.image)
+        elif self.ui.comboBox_3.currentIndex() == 3:
+            output = self.high_pass_filter(self.image)
+        elif self.ui.comboBox_3.currentIndex() == 4:
+            output = self.low_pass_filter(self.image)
+        #self.ui.widget_4.setPixmap(QPixmap(self.display(output)))
+        self.my_img = pg.ImageItem(output)
+        self.ui.widget_4.addItem(self.my_img)
 
 ########################Threshold################################
     def global_threshold_v_127(self,img):
