@@ -29,7 +29,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
         self.ui.comboBox.currentIndexChanged[int].connect(self.histogram_selection)
-        self.Hybrid_image(self.img4,self.img5,0.3)
+        self.ui.comboBox_4.currentIndexChanged[int].connect(self.visualize_hybrid_image)
         #self.get_histogram(self.img3,256)
 
     def convolution(self, image, kernel, average=False, verbose=False):
@@ -316,14 +316,37 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             laplace_image = self.laplacian_image(first_image)
             gaussian_image = self.gaussian_filter(second_image)
             Hybrid_img = alpha * laplace_image + (1 - alpha) * gaussian_image
+            return Hybrid_img
             # img = np.array(Hybrid_img).reshape(self.img4.shape[1],self.img4.shape[0]).astype(np.uint8)
             # img = QtGui.QImage(img, img.shape[0],img.shape[1],QtGui.QImage.Format_Grayscale8)
+        #     if self.ui.comboBox_4.currentIndex() == 3:
+        #         my_img = pg.ImageItem(Hybrid_img)
+        #         self.ui.widget_3.addItem(my_img)
+
+        #     elif self.ui.comboBox_4.currentIndex() == 2:
+        #         my_img = pg.ImageItem(first_image)
+        #         self.ui.widget_3.addItem(my_img)
+        #     elif self.ui.comboBox_4.currentIndex() == 1:
+        #         my_img = pg.ImageItem(second_image)
+        #         self.ui.widget_3.addItem(my_img)
+
+        # else:
+        #     pass
+    def visualize_hybrid_image(self):
+        if self.ui.comboBox_4.currentIndex() == 3:
+            #self.ui.widget_3.clear()
+            Hybrid_img = self.Hybrid_image(self.img4,self.img5,0.3)
             my_img = pg.ImageItem(Hybrid_img)
             self.ui.widget_3.addItem(my_img)
 
-        else:
-            pass
-
+        elif self.ui.comboBox_4.currentIndex() == 2:
+            self.ui.widget_3.clear()
+            my_img = pg.ImageItem(self.img4)
+            self.ui.widget_3.addItem(my_img)
+        elif self.ui.comboBox_4.currentIndex() == 1:
+            self.ui.widget_3.clear()
+            my_img = pg.ImageItem(self.img5)
+            self.ui.widget_3.addItem(my_img)
 
 
 
