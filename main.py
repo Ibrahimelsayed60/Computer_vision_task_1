@@ -146,7 +146,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def display(self, img):
             img = np.array(img).reshape(self.img.shape[1],self.img.shape[0]).astype(np.uint8)
-            img = QtGui.QImage(img, img.shape[0],img.shape[1],QtGui.QImage.Format_Grayscale8)
+            img = QtGui.QImage(img, img.shape[0] ,img.shape[1] ,QtGui.QImage.Format_Grayscale8)
             return img
 
 ########################Threshold################################
@@ -215,12 +215,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return gray
 
     def cumulative_histogram(self,hist_input):
-        a= iter(hist_input)
-        b = [next(a)]
-        for i in a:
+        hist= iter(hist_input)
+        b = [next(hist)]
+        for i in hist:
             b.append(b[-1] + i)
-        return np.array(b)
+        # return np.array(b)
         # pg.plot
+        b = np.array(b)
+        nj = (b - b.min()) * 255
+        N = b.max() - b.min()
+
+        cum_curv = nj/N
+        return cum_curv
 
 
     def get_histogram(self, image_input,bins):
@@ -237,12 +243,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # my_img = pg.BarGraphItem(x=histogram,height=image_input.flatten(),width=0.6, brush='r')
         # self.ui.widget.addItem(my_img)
 
+    # def equalized_histogram(self,cumulative_sum,image_in):
+    #     nj = (cumulative_sum - cumulative_sum.min()) * 255
+    #     N = cumulative_sum.max() - cumulative_sum.min()
+
+    #     # re-normalize the cdf
+    #     cs = nj / N
+    #     cs = cs.astype('uint8')
+
+
+
+
     def histogram_selection(self):
         if self.ui.comboBox.currentIndex() == 4:
             self.ui.widget.clear()
             cum_curve = self.cumulative_histogram(self.get_histogram(self.img3,256))
             #curve = pg.plot(cum_curve)
-            self.ui.widget.addItem(cum_curve.all())
+            self.ui.widget.plot(cum_curve)
         elif self.ui.comboBox.currentIndex() == 1:
             self.ui.widget.clear()
             red_hist = self.get_histogram(self.img2[:,:,0],256)
@@ -253,6 +270,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             green_hist = self.get_histogram(self.img2[:,:,1],256)
             my_img = pg.BarGraphItem(x=green_hist,height=self.img2[:,:,1].flatten(),width=0.6, brush='g')
             self.ui.widget.addItem(my_img)
+            #pg.HistogramLUTWidgetm()
         elif self.ui.comboBox.currentIndex() == 3:
             self.ui.widget.clear()
             blue_hist = self.get_histogram(self.img2[:,:,2],256)
@@ -265,7 +283,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.widget.addItem(my_img)
         elif self.ui.comboBox.currentIndex() ==5:
             self.ui.widget.clear()
-            
+            cum_hist = self.cumulative_histogram(self.get_histogram(self.img3,256))
+            cum_hist = cum_hist.astype('uint8')
+            histo = cum_hist[self.img3.flatten()]
+            my_img = pg.BarGraphItem(x=histo,height=self.img2[:,:,0].flatten(),width=0.6, brush='r') 
+            self.ui.widget.addItem(my_img)
+
+
 
         else:
             pass
