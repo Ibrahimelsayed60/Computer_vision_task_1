@@ -19,6 +19,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.img3 = cv2.rotate(cv2.imread(path,0),cv2.ROTATE_90_CLOCKWISE)
         self.img4 = cv2.rotate(cv2.imread('test.jpg',0),cv2.ROTATE_90_CLOCKWISE)
         self.img5 = cv2.rotate(cv2.imread('test2.jpg',0),cv2.ROTATE_90_CLOCKWISE)
+    
         ###########To remove axis###############
         self.ui.widget_2.getPlotItem().hideAxis('bottom')
         self.ui.widget_2.getPlotItem().hideAxis('left')
@@ -28,7 +29,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_4.getPlotItem().hideAxis('left')
 
         self.ui.image1.setPixmap(QPixmap(path))
-        self.ui.comboBox_Image1_3.setEnabled(False)
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
@@ -57,18 +57,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return output
 
     # Add additive noise to the image
-    def uniform_noise(self, img):
-        gaussian = np.random.randn(img.shape[0], img.shape[1])
-        img = img + img*gaussian
-        return img
-
     def gaussian_noise(self, img):
         mean = 0
-        var = 100
+        var = 10
         sigma = var ** 0.5
         gaussian = np.random.normal(mean, sigma, (256, 256))
-        img = img + gaussian
-        return img
+        new_img = np.zeros(img.shape, np.float32)
+        if len(img.shape) == 2:
+            new_img = img + gaussian
+        else:
+            new_img[:, :, 0] = img[:, :, 0] + gaussian
+            new_img[:, :, 1] = img[:, :, 1] + gaussian
+            new_img[:, :, 2] = img[:, :, 2] + gaussian
+        cv2.normalize(new_img, new_img, 0, 255, cv2.NORM_MINMAX, dtype=-1)
+        return new_img
 
     def salt_and_pepper_noise(self, img):
         row , col = img.shape
@@ -90,7 +92,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             x_coord=random.randint(0, col - 1)	          
             # Color that pixel to black
             img[y_coord][x_coord] = 0	          
-        self.img = cv2.imread('lena.jpg', 0)
         return img
     
     # Filter the noisy image using the low pass filters
@@ -131,12 +132,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return img_new
 
     def noisy_image(self):
-        self.ui.comboBox_Image1_3.setEnabled(True)
         if self.ui.comboBox_Image1.currentIndex() == 1:
-            self.image = self.uniform_noise(self.img)
-        elif self.ui.comboBox_Image1.currentIndex() == 2:
             self.image = self.gaussian_noise(self.img)
-        elif self.ui.comboBox_Image1.currentIndex() == 3:
+        elif self.ui.comboBox_Image1.currentIndex() == 2:
             self.image = self.salt_and_pepper_noise(self.img)
         self.ui.image2.setPixmap(QPixmap(self.display(self.image)))
         self.filtered_image()
@@ -225,16 +223,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return self.img_new
  
     def edge_detection_filter(self):
-        if self.ui.comboBox_3.currentIndex() == 0:
-            output = self.sobel(self.image)
-        elif self.ui.comboBox_3.currentIndex() == 1:
-            output = self.perwitt(self.image)
+        if self.ui.comboBox_3.currentIndex() == 1:
+            output = self.sobel(self.img3)
         elif self.ui.comboBox_3.currentIndex() == 2:
-            output = self.roberts(self.image)
+            output = self.perwitt(self.img3)
         elif self.ui.comboBox_3.currentIndex() == 3:
-            output = self.high_pass_filter(self.image)
+            output = self.roberts(self.img3)
         elif self.ui.comboBox_3.currentIndex() == 4:
-            output = self.low_pass_filter(self.image)
+            output = self.high_pass_filter(self.img3)
+        elif self.ui.comboBox_3.currentIndex() == 5:
+            output = self.low_pass_filter(self.img3)
         #self.ui.widget_4.setPixmap(QPixmap(self.display(output)))
         self.my_img = pg.ImageItem(output)
         self.ui.widget_4.addItem(self.my_img)
@@ -252,10 +250,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         return binary
 
-    def local_treshold(self,input_img,Thres):
+    def local_treshold(self,input_img):
         h, w = input_img.shape
         S = w/8
         s2 = S/2
+        T = 15.0
         #integral img
         int_img = np.zeros_like(input_img, dtype=np.uint32)
         for col in range(w):
@@ -272,7 +271,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 x1 = int(min(col+s2, w-1))
                 count = (y1-y0)*(x1-x0)
                 sum_ = int_img[y1, x1]-int_img[y0, x1]-int_img[y1, x0]+int_img[y0, x0]
-                if input_img[row, col]*count < sum_*(100.-Thres)/100.:
+                if input_img[row, col]*count < sum_*(100.-T)/100.:
                     out_img[row,col] = 0
                 else:
                     out_img[row,col] = 255
@@ -286,7 +285,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             my_img = pg.ImageItem(out_put)
             self.ui.widget_2.addItem(my_img)
         elif self.ui.comboBox_Image1_2.currentIndex() == 2:
-            out = self.local_treshold(self.img3,15.0)
+            out = self.local_treshold(self.img3)
             my_img = pg.ImageItem(out)
             self.ui.widget_2.addItem(my_img)
         else:

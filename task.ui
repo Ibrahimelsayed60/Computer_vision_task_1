@@ -246,6 +246,11 @@
              <widget class="QComboBox" name="comboBox_3">
               <item>
                <property name="text">
+                <string>Choose Filter</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>Sobel</string>
                </property>
               </item>
@@ -420,7 +425,7 @@
      <x>0</x>
      <y>0</y>
      <width>1174</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
