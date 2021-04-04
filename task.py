@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'task.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -125,6 +127,7 @@ class Ui_MainWindow(object):
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
+        self.comboBox_3.addItem("")
         self.horizontalLayout_6.addWidget(self.comboBox_3)
         self.horizontalLayout_11.addLayout(self.horizontalLayout_6)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
@@ -197,7 +200,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.addLayout(self.verticalLayout_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1174, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1174, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -225,11 +228,12 @@ class Ui_MainWindow(object):
         self.comboBox_Image1_2.setItemText(1, _translate("MainWindow", "Global_threshold_v_127"))
         self.comboBox_Image1_2.setItemText(2, _translate("MainWindow", "Local threshold"))
         self.label_5.setText(_translate("MainWindow", "Edge detection and Filters"))
-        self.comboBox_3.setItemText(0, _translate("MainWindow", "Sobel"))
-        self.comboBox_3.setItemText(1, _translate("MainWindow", "Prewitt"))
-        self.comboBox_3.setItemText(2, _translate("MainWindow", "Roberts"))
-        self.comboBox_3.setItemText(3, _translate("MainWindow", "High Pass Filter"))
-        self.comboBox_3.setItemText(4, _translate("MainWindow", "Low Pass Filter"))
+        self.comboBox_3.setItemText(0, _translate("MainWindow", "Choose Filter"))
+        self.comboBox_3.setItemText(1, _translate("MainWindow", "Sobel"))
+        self.comboBox_3.setItemText(2, _translate("MainWindow", "Prewitt"))
+        self.comboBox_3.setItemText(3, _translate("MainWindow", "Roberts"))
+        self.comboBox_3.setItemText(4, _translate("MainWindow", "High Pass Filter"))
+        self.comboBox_3.setItemText(5, _translate("MainWindow", "Low Pass Filter"))
         self.label_6.setText(_translate("MainWindow", "Histogram"))
         self.label_7.setText(_translate("MainWindow", "Transforamtion"))
         self.comboBox.setItemText(0, _translate("MainWindow", "check transformation___"))
@@ -244,5 +248,4 @@ class Ui_MainWindow(object):
         self.comboBox_4.setItemText(1, _translate("MainWindow", "Image 1"))
         self.comboBox_4.setItemText(2, _translate("MainWindow", "image 2"))
         self.comboBox_4.setItemText(3, _translate("MainWindow", "Hybrid image"))
-
 from pyqtgraph import PlotWidget
