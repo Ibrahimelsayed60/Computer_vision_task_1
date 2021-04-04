@@ -284,7 +284,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             my_img = pg.ImageItem(out_put)
             self.ui.widget_2.addItem(my_img)
         elif self.ui.comboBox_Image1_2.currentIndex() == 2:
-            out = self.local_treshold(self.img3,30.0)
+            out = self.local_treshold(self.img3,15.0)
             my_img = pg.ImageItem(out)
             self.ui.widget_2.addItem(my_img)
         else:
