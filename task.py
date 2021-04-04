@@ -2,18 +2,16 @@
 
 # Form implementation generated from reading ui file 'task.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1164, 771)
+        MainWindow.resize(1174, 771)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -41,6 +39,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.label_2)
         self.comboBox_Image1 = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_Image1.setObjectName("comboBox_Image1")
+        self.comboBox_Image1.addItem("")
         self.comboBox_Image1.addItem("")
         self.comboBox_Image1.addItem("")
         self.comboBox_Image1.addItem("")
@@ -80,20 +79,27 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.image1 = QtWidgets.QLabel(self.centralwidget)
+        self.image1.setSizeIncrement(QtCore.QSize(10, 10))
         self.image1.setText("")
+        self.image1.setScaledContents(True)
         self.image1.setObjectName("image1")
         self.horizontalLayout_5.addWidget(self.image1)
         self.image2 = QtWidgets.QLabel(self.centralwidget)
         self.image2.setMinimumSize(QtCore.QSize(250, 250))
+        self.image2.setSizeIncrement(QtCore.QSize(10, 10))
         self.image2.setText("")
+        self.image2.setScaledContents(True)
         self.image2.setObjectName("image2")
         self.horizontalLayout_5.addWidget(self.image2)
         self.image3 = QtWidgets.QLabel(self.centralwidget)
         self.image3.setMinimumSize(QtCore.QSize(300, 250))
+        self.image3.setSizeIncrement(QtCore.QSize(10, 10))
         self.image3.setText("")
+        self.image3.setScaledContents(True)
         self.image3.setObjectName("image3")
         self.horizontalLayout_5.addWidget(self.image3)
         self.widget_2 = PlotWidget(self.centralwidget)
+        self.widget_2.setMaximumSize(QtCore.QSize(475, 16777215))
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout_5.addWidget(self.widget_2)
         self.verticalLayout.addLayout(self.horizontalLayout_5)
@@ -191,7 +197,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.addLayout(self.verticalLayout_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1164, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1174, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -207,8 +213,9 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Original Image"))
         self.label_2.setText(_translate("MainWindow", "Add Noise"))
         self.comboBox_Image1.setItemText(0, _translate("MainWindow", "Add Noise"))
-        self.comboBox_Image1.setItemText(1, _translate("MainWindow", "Gaussian Noise"))
-        self.comboBox_Image1.setItemText(2, _translate("MainWindow", "Salt and Pepper Noise"))
+        self.comboBox_Image1.setItemText(1, _translate("MainWindow", "Uniform Noise"))
+        self.comboBox_Image1.setItemText(2, _translate("MainWindow", "Gaussian Noise"))
+        self.comboBox_Image1.setItemText(3, _translate("MainWindow", "Salt and Pepper Noise"))
         self.label_3.setText(_translate("MainWindow", "Remove Noise"))
         self.comboBox_Image1_3.setItemText(0, _translate("MainWindow", "Average Filter"))
         self.comboBox_Image1_3.setItemText(1, _translate("MainWindow", "Gaussian Filter"))
@@ -237,4 +244,5 @@ class Ui_MainWindow(object):
         self.comboBox_4.setItemText(1, _translate("MainWindow", "Image 1"))
         self.comboBox_4.setItemText(2, _translate("MainWindow", "image 2"))
         self.comboBox_4.setItemText(3, _translate("MainWindow", "Hybrid image"))
+
 from pyqtgraph import PlotWidget

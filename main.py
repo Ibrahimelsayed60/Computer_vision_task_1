@@ -28,6 +28,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_4.getPlotItem().hideAxis('left')
 
         self.ui.image1.setPixmap(QPixmap(path))
+        self.ui.comboBox_Image1_3.setEnabled(False)
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
@@ -56,20 +57,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return output
 
     # Add additive noise to the image
+    def uniform_noise(self, img):
+        gaussian = np.random.randn(img.shape[0], img.shape[1])
+        img = img + img*gaussian
+        return img
+
     def gaussian_noise(self, img):
         mean = 0
-        var = 10
+        var = 100
         sigma = var ** 0.5
         gaussian = np.random.normal(mean, sigma, (256, 256))
-        new_img = np.zeros(img.shape, np.float32)
-        if len(img.shape) == 2:
-            new_img = img + gaussian
-        else:
-            new_img[:, :, 0] = img[:, :, 0] + gaussian
-            new_img[:, :, 1] = img[:, :, 1] + gaussian
-            new_img[:, :, 2] = img[:, :, 2] + gaussian
-        cv2.normalize(new_img, new_img, 0, 255, cv2.NORM_MINMAX, dtype=-1)
-        return new_img
+        img = img + gaussian
+        return img
 
     def salt_and_pepper_noise(self, img):
         row , col = img.shape
@@ -91,6 +90,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             x_coord=random.randint(0, col - 1)	          
             # Color that pixel to black
             img[y_coord][x_coord] = 0	          
+        self.img = cv2.imread('lena.jpg', 0)
         return img
     
     # Filter the noisy image using the low pass filters
@@ -131,9 +131,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return img_new
 
     def noisy_image(self):
+        self.ui.comboBox_Image1_3.setEnabled(True)
         if self.ui.comboBox_Image1.currentIndex() == 1:
-            self.image = self.gaussian_noise(self.img)
+            self.image = self.uniform_noise(self.img)
         elif self.ui.comboBox_Image1.currentIndex() == 2:
+            self.image = self.gaussian_noise(self.img)
+        elif self.ui.comboBox_Image1.currentIndex() == 3:
             self.image = self.salt_and_pepper_noise(self.img)
         self.ui.image2.setPixmap(QPixmap(self.display(self.image)))
         self.filtered_image()

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1164</width>
+    <width>1174</width>
     <height>771</height>
    </rect>
   </property>
@@ -55,6 +55,11 @@
               <item>
                <property name="text">
                 <string>Add Noise</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Uniform Noise</string>
                </property>
               </item>
               <item>
@@ -147,8 +152,17 @@
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <widget class="QLabel" name="image1">
+            <property name="sizeIncrement">
+             <size>
+              <width>10</width>
+              <height>10</height>
+             </size>
+            </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -160,8 +174,17 @@
               <height>250</height>
              </size>
             </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>10</width>
+              <height>10</height>
+             </size>
+            </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -173,13 +196,29 @@
               <height>250</height>
              </size>
             </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>10</width>
+              <height>10</height>
+             </size>
+            </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="PlotWidget" name="widget_2" native="true"/>
+           <widget class="PlotWidget" name="widget_2" native="true">
+            <property name="maximumSize">
+             <size>
+              <width>475</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -380,8 +419,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1164</width>
-     <height>22</height>
+     <width>1174</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
