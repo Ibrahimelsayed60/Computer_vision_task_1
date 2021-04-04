@@ -1,6 +1,40 @@
+## Adding additive noise to the image
+
+- #### Uniform Noise:
+The noise caused by quantizing the pixels of a sensed image to a number of discrete levels. It has an approximately uniform distribution.
+
+  <img src="Images/uniform_noise.png" style="zoom:50%;" position="Center" />
+- #### Gaussian Noise:
+It is a statistical noise having a probability density function equal to normal distribution, also known as Gaussian Distribution. Random Gaussian function is added to Image function to generate this noise.
+  <img src="Images/gaussian_noise.png" style="zoom:50%;" position="Center" />
+
+- #### Salt and Pepper Noise:
+An image having salt-and-pepper noise will have a few dark pixels in bright regions and a few bright pixels in dark regions.
+  - Randomly pick some pixels in the image to which noise will be added.
+  - Color some randomly picked pixels as black setting their value to 0.
+  - Color some randomly picked pixels as white setting their value to 255.
+
+  <img src="Images/salt_and_pepper_noise.png" style="zoom:50%;" position="Center" />
+
+## Filtering the noisy images
+Mask is usually considered to be odded in size so that it has a specific center pixel. This mask is moved on the image such that the center of the mask traverses all image pixels.
+- #### Average Filter:
+ It removes the high-frequency content from the image. It is also used to blur an image.
+
+ <img src="Images/average_filter.png" style="zoom:50%;" position="Center" />
+
+- #### Gaussian Filter:
+A Gaussian Filter is a low pass filter used for reducing noise and blurring regions of an image. The filter is implemented as an Odd sized Symmetric Kernel which is passed through each pixel of the Region of Interest to get the desired effect.
+<img src="Images/gaussian_filter.png" style="zoom:50%;" position="Center" />
+
+- #### Median Filter:
+ It is used to eliminate salt and pepper noise. Here the pixel value is replaced by the median value of the neighboring pixel.
+ <img src="Images/median_filter.png" style="zoom:50%;" position="Center" />
+
+
 ## Global and Local Threshold
 
-- **Global** thresholding consists of setting an intensity value (threshold) such that all voxels having intensity value below the threshold belong to one phase, the remainder belong to the other. 
+- **Global** thresholding consists of setting an intensity value (threshold) such that all voxels having intensity value below the threshold belong to one phase, the remainder belong to the other.
 
 - Global thresholding is as good as the degree of intensity separation between the two peaks in the image. It is an unsophisticated segmentation choice.
 
@@ -62,7 +96,7 @@
   H = I_1 · \alpha  + I_2 ·(1 − \alpha)
   $$
 
-  - First image: 
+  - First image:
 
     <img src="Images\test.jpg" style="zoom:50%;" position="Center" />
 
@@ -70,6 +104,6 @@
 
     <img src="Images\test2.jpg" style="zoom:50%;" position="Center"/>
 
-  - **Hybrid** image: 
+  - **Hybrid** image:
 
     <img src="Images\hybrid_image.png" style="zoom:70%;" position="Center"/>
