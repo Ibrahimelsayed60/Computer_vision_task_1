@@ -256,7 +256,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         h, w = input_img.shape
         S = w/8
         s2 = S/2
-        #Thres = 15.0
         #integral img
         int_img = np.zeros_like(input_img, dtype=np.uint32)
         for col in range(w):
