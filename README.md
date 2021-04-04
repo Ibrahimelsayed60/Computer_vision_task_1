@@ -1,11 +1,50 @@
+## Adding additive noise to the image
+
+### Uniform Noise:
+The noise caused by quantizing the pixels of a sensed image to a number of discrete levels. It has an approximately uniform distribution.
+
+  <img src="Images/uniform_noise.png" style="zoom:50%;" position="Center" />
+
+### Gaussian Noise:
+It is a statistical noise having a probability density function equal to normal distribution, also known as Gaussian Distribution. Random Gaussian function is added to Image function to generate this noise.
+
+  <img src="Images/gaussian_noise.png" style="zoom:50%;" position="Center" />
+
+### Salt and Pepper Noise:
+An image having salt-and-pepper noise will have a few dark pixels in bright regions and a few bright pixels in dark regions.
+  - Randomly pick some pixels in the image to which noise will be added.
+  - Color some randomly picked pixels as black setting their value to 0.
+  - Color some randomly picked pixels as white setting their value to 255.
+
+<img src="Images/salt_and_pepper_noise.png" style="zoom:50%;" position="Center" />
+
+## Filtering the noisy images
+Mask is usually considered to be odded in size so that it has a specific center pixel. This mask is moved on the image such that the center of the mask traverses all image pixels.
+### Average Filter:
+ It removes the high-frequency content from the image. It is also used to blur an image.
+
+ <img src="Images/average_filter.png" style="zoom:50%;" position="Center" />
+
+### Gaussian Filter:
+A Gaussian Filter is a low pass filter used for reducing noise and blurring regions of an image. The filter is implemented as an Odd sized Symmetric Kernel which is passed through each pixel of the Region of Interest to get the desired effect.
+
+  <img src="Images/gaussian_filter.png" style="zoom:50%;" position="Center" />
+
+### Median Filter:
+ It is used to eliminate salt and pepper noise. Here the pixel value is replaced by the median value of the neighboring pixel.
+
+ <img src="Images/median_filter.png" style="zoom:50%;" position="Center" />
+
+
 # Edge Detection
+
 1. Read the image and convert it to grey scale.
 2. Calculate rows and columns of original image.
-3. Get an empty image which is equal in dimensions to the original image. 
+3. Get an empty image which is equal in dimensions to the original image.
 4. Apply the edge detection mask to the image using convolution.
 5. Display the image after applying edge detection to it by selecting a metthod from the combobox.
 
-- ## **Sobel Edge Detection**
+## **Sobel Edge Detection**
 The matrices associated with Sobel filter :
 - Gx = np.array([[1.0, 0.0, -1.0], [2.0, 0.0, -2.0], [1.0, 0.0, -1.0]])
 - Gy = np.array([[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]])
@@ -31,7 +70,7 @@ The matrices associated with Roberts filter :
 
 ## Global and Local Threshold
 
-- **Global** thresholding consists of setting an intensity value (threshold) such that all voxels having intensity value below the threshold belong to one phase, the remainder belong to the other. 
+- **Global** thresholding consists of setting an intensity value (threshold) such that all voxels having intensity value below the threshold belong to one phase, the remainder belong to the other.
 
 - Global thresholding is as good as the degree of intensity separation between the two peaks in the image. It is an unsophisticated segmentation choice.
 
@@ -85,9 +124,9 @@ The matrices associated with Roberts filter :
   <img src="Images\cumulative_curve.png" style="zoom:100%;" position="Center" />
 
 ## High Pass Filter
-Read the image and convert it to grey scale.
+1. Read the image and convert it to grey scale.
 2. Calculate rows and columns of original image.
-3. Get an empty image which is equal in dimensions to the original image. 
+3. Get an empty image which is equal in dimensions to the original image.
 4. Apply the High pass (Laplacian filter) mask to the image.
 5. Perform FFT to the image then inverse fft.
 6. Display the image (the result of applying high pass filter to the image is a sharpened image similar to that of edge detection).
@@ -96,9 +135,9 @@ Read the image and convert it to grey scale.
 <img src="Images\HPF.jpg" style="zoom:85%;" position="Center" />
 
 ## Low Pass Filter
-Read the image and convert it to grey scale.
+1. Read the image and convert it to grey scale.
 2. Calculate rows and columns of original image.
-3. Get an empty image which is equal in dimensions to the original image. 
+3. Get an empty image which is equal in dimensions to the original image.
 4. Apply the Low pass (Average) mask to the image.
 5. Perform FFT to the image then inverse fft.
 6. Display the image (the result of applying low pass filter to the image is a blurred image similar to that of Gaussian filter).
@@ -115,7 +154,7 @@ Read the image and convert it to grey scale.
   H = I_1 · \alpha  + I_2 ·(1 − \alpha)
   $$
 
-  - First image: 
+  - First image:
 
     <img src="Images\test.jpg" style="zoom:50%;" position="Center" />
 
@@ -123,6 +162,6 @@ Read the image and convert it to grey scale.
 
     <img src="Images\test2.jpg" style="zoom:50%;" position="Center"/>
 
-  - **Hybrid** image: 
+  - **Hybrid** image:
 
     <img src="Images\hybrid_image.png" style="zoom:70%;" position="Center"/>
