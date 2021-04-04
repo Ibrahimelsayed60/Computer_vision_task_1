@@ -249,11 +249,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         return binary
 
-    def local_treshold(self,input_img):
+    def local_treshold(self,input_img,Thres):
         h, w = input_img.shape
         S = w/8
         s2 = S/2
-        T = 15.0
+        #Thres = 15.0
         #integral img
         int_img = np.zeros_like(input_img, dtype=np.uint32)
         for col in range(w):
@@ -270,7 +270,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 x1 = int(min(col+s2, w-1))
                 count = (y1-y0)*(x1-x0)
                 sum_ = int_img[y1, x1]-int_img[y0, x1]-int_img[y1, x0]+int_img[y0, x0]
-                if input_img[row, col]*count < sum_*(100.-T)/100.:
+                if input_img[row, col]*count < sum_*(100.-Thres)/100.:
                     out_img[row,col] = 0
                 else:
                     out_img[row,col] = 255
@@ -284,7 +284,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             my_img = pg.ImageItem(out_put)
             self.ui.widget_2.addItem(my_img)
         elif self.ui.comboBox_Image1_2.currentIndex() == 2:
-            out = self.local_treshold(self.img3)
+            out = self.local_treshold(self.img3,30.0)
             my_img = pg.ImageItem(out)
             self.ui.widget_2.addItem(my_img)
         else:
