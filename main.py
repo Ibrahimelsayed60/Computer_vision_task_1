@@ -130,65 +130,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 img_new[i, j]= temp[4]
         return img_new
 
-    def high_pass_filter(self,img):
-        row, col = img.shape
-        mask = np.zeros((row, col))
-        hpf = np.array([[-1,-1,-1],[0,0,0],[1,1,1]])
-        mask[20:23,20:23] = hpf
-        mask = np.fft.fftshift(np.fft.fft2(mask))
-        image = np.fft.fftshift(np.fft.fft2(img))
-        img_new = np.fft.ifft2(mask*image)
-        img_new = np.log(1+np.abs(img_new))
-        return img_new
-
-    def low_pass_filter(self, img):
-        row, col = img.shape
-        mask = np.zeros((row, col))
-        avgMask= np.ones((9,9))/81
-        mask[24:33,24:33] = avgMask
-        mask = np.fft.fftshift(np.fft.fft2(mask))
-        image = np.fft.fftshift(np.fft.fft2(img))
-        img_new = np.fft.ifft2(mask*image)
-        img_new = np.log(1+np.abs(img_new))
-        return img_new
-
-    def sobel(self,img):
-        row, col = img.shape
-        Gx = np.array([[1.0, 0.0, -1.0], [2.0, 0.0, -2.0], [1.0, 0.0, -1.0]])
-        Gy = np.array([[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]])
-        self.new_img = np.zeros([row, col]) 
-        for i in range(row - 2):
-            for j in range(col - 2):
-                gx = np.sum(np.multiply(Gx, img[i:i + 3, j:j + 3]))  # x direction
-                gy = np.sum(np.multiply(Gy, img[i:i + 3, j:j + 3]))  # y direction
-                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
-        self.img_new = self.new_img.astype(np.uint8)    
-        return self.img_new
-    def perwitt(self,img) :
-        row, col = img.shape
-        Gx = np.array([[1.0, 0.0, -1.0], [1.0, 0.0, -1.0], [1.0, 0.0, -1.0]])
-        Gy = np.array([[1.0, 1.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -1.0, -1.0]])
-        self.new_img = np.zeros([row, col]) 
-        for i in range(row - 2):
-            for j in range(col - 2):
-                gx = np.sum(np.multiply(Gx, img[i:i + 3, j:j + 3]))  # x direction
-                gy = np.sum(np.multiply(Gy, img[i:i + 3, j:j + 3]))  # y direction
-                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
-        self.img_new = self.new_img.astype(np.uint8)    
-        return self.img_new
-    def roberts(self,img):
-        row, col = img.shape
-        Gx = np.array([[1.0, 0.0], [0.0, -1.0]])
-        Gy = np.array([[0.0, -1.0], [1.0, 0.0]])
-        self.new_img = np.zeros([row, col]) 
-        for i in range(row - 2):
-            for j in range(col - 2):
-                gx = np.sum(np.multiply(Gx, img[i:i + 2, j:j + 2]))  # x direction
-                gy = np.sum(np.multiply(Gy, img[i:i + 2, j:j + 2]))  # y direction
-                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
-        self.img_new = self.new_img.astype(np.uint8)    
-        return self.img_new
- 
     def noisy_image(self):
         if self.ui.comboBox_Image1.currentIndex() == 1:
             self.image = self.gaussian_noise(self.img)
@@ -211,6 +152,75 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             img = np.array(img).reshape(self.img.shape[1],self.img.shape[0]).astype(np.uint8)
             img = QtGui.QImage(img, img.shape[0] ,img.shape[1] ,QtGui.QImage.Format_Grayscale8)
             return img 
+
+## High and Low pass Filters
+
+    def high_pass_filter(self,img):
+        row, col = img.shape
+        mask = np.zeros((row, col))
+        hpf = np.array([[-1,-1,-1],[0,0,0],[1,1,1]])
+        mask[20:23,20:23] = hpf
+        mask = np.fft.fftshift(np.fft.fft2(mask))
+        image = np.fft.fftshift(np.fft.fft2(img))
+        img_new = np.fft.ifft2(mask*image)
+        img_new = np.log(1+np.abs(img_new))
+        return img_new
+
+    def low_pass_filter(self, img):
+        row, col = img.shape
+        mask = np.zeros((row, col))
+        avgMask= np.ones((9,9))/81
+        mask[24:33,24:33] = avgMask
+        mask = np.fft.fftshift(np.fft.fft2(mask))
+        image = np.fft.fftshift(np.fft.fft2(img))
+        img_new = np.fft.ifft2(mask*image)
+        img_new = np.log(1+np.abs(img_new))
+        return img_new
+
+## Edge Detection
+
+# Sobel Edge detection
+    def sobel(self,img):
+        row, col = img.shape
+        Gx = np.array([[1.0, 0.0, -1.0], [2.0, 0.0, -2.0], [1.0, 0.0, -1.0]])
+        Gy = np.array([[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]])
+        self.new_img = np.zeros([row, col]) 
+        for i in range(row - 2):
+            for j in range(col - 2):
+                gx = np.sum(np.multiply(Gx, img[i:i + 3, j:j + 3]))  # x direction
+                gy = np.sum(np.multiply(Gy, img[i:i + 3, j:j + 3]))  # y direction
+                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
+        self.img_new = self.new_img.astype(np.uint8)    
+        return self.img_new
+
+#Prewitt Edge Detection
+    def perwitt(self,img) :
+        row, col = img.shape
+        Gx = np.array([[1.0, 0.0, -1.0], [1.0, 0.0, -1.0], [1.0, 0.0, -1.0]])
+        Gy = np.array([[1.0, 1.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -1.0, -1.0]])
+        self.new_img = np.zeros([row, col]) 
+        for i in range(row - 2):
+            for j in range(col - 2):
+                gx = np.sum(np.multiply(Gx, img[i:i + 3, j:j + 3]))  # x direction
+                gy = np.sum(np.multiply(Gy, img[i:i + 3, j:j + 3]))  # y direction
+                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
+        self.img_new = self.new_img.astype(np.uint8)    
+        return self.img_new
+
+#Roberts Edge Detection
+    def roberts(self,img):
+        row, col = img.shape
+        Gx = np.array([[1.0, 0.0], [0.0, -1.0]])
+        Gy = np.array([[0.0, -1.0], [1.0, 0.0]])
+        self.new_img = np.zeros([row, col]) 
+        for i in range(row - 2):
+            for j in range(col - 2):
+                gx = np.sum(np.multiply(Gx, img[i:i + 2, j:j + 2]))  # x direction
+                gy = np.sum(np.multiply(Gy, img[i:i + 2, j:j + 2]))  # y direction
+                self.new_img[i + 1, j + 1] = np.sqrt(gx ** 2 + gy ** 2)
+        self.img_new = self.new_img.astype(np.uint8)    
+        return self.img_new
+ 
     def edge_detection_filter(self):
         if self.ui.comboBox_3.currentIndex() == 0:
             output = self.sobel(self.image)
