@@ -6,13 +6,13 @@
 
 - In global threshold, we put the threshold equal 127. Then, we get the image is larger than the threshold.
 
-  <img src="Images\Global_threshold.png" style="zoom:85%;" />
+  <img src="Images\Global_threshold.png" style="zoom:85%;" position="Center" />
 
 - **Local** thresholding is used to separate desirable foreground image objects from the background based on the difference in pixel intensities of each region.
 
 - Local thresholding selects an individual threshold for each pixel based on the range of intensity values in its local neighborhood. This allows for thresholding of an image whose global intensity histogram doesn't contain distinctive peaks.
 
-  <img src="Images\local_threshold.png" style="zoom:80%;" />
+  <img src="Images\local_threshold.png" style="zoom:80%;" position="Center"/>
 
 ## Transformation
 
@@ -25,7 +25,7 @@
   {\displaystyle Y_{\mathrm {linear} }=0.07R_{\mathrm {linear} }+0.7152G_{\mathrm {linear} }+0.21B_{\mathrm {linear} }}.
   $$
 
-<img src="Images\grayscale_image.png" style="zoom:80%;" />
+<img src="Images\grayscale_image.png" style="zoom:80%;" position="Center" />
 
 #### Histogram of R,G,B channels
 
@@ -35,15 +35,15 @@
 
   - Histogram of **Red** channel in image:
 
-    <img src="Images\red_channel_histogram.png" style="zoom:100%;" />
+    <img src="Images\red_channel_histogram.png" style="zoom:100%;" position="Center"/>
 
   - Histogram of **Green** channel:
 
-    <img src="Images\green_channel_image.png" style="zoom:100%;" />
+    <img src="Images\green_channel_image.png" style="zoom:100%;" position="Center" />
 
   - Histogram of **Blue** channel:
 
-    <img src="Images\blue_channel_histogram.png" style="zoom:100%;" />
+    <img src="Images\blue_channel_histogram.png" style="zoom:100%;" position="Center"/>
 
 #### Cumulative Curve
 
@@ -51,7 +51,7 @@
 
 - Then, We now have the cumulative sum, but as you can see, the values are huge (> 6,000,000). We’re going to be matching these values to our original image in the final step, so we have to normalize them to conform to a range of 0–255.
 
-  <img src="E:\Computer vision tasks\Renad part\report\Images\cumulative_curve.png" style="zoom:100%;" />
+  <img src="Images\cumulative_curve.png" style="zoom:100%;" position="Center" />
 
 ## Hybrid Image
 
@@ -64,12 +64,12 @@
 
   - First image: 
 
-    <img src="Images\test.jpg" style="zoom:50%;" />
+    <img src="Images\test.jpg" style="zoom:50%;" position="Center" />
 
   - Second image:
 
-    <img src="Images\test2.jpg" style="zoom:50%;" />
+    <img src="Images\test2.jpg" style="zoom:50%;" position="Center"/>
 
   - **Hybrid** image: 
 
-    <img src="Images\hybrid_image.png" style="zoom:70%;" />
+    <img src="Images\hybrid_image.png" style="zoom:70%;" position="Center"/>
