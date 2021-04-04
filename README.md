@@ -25,10 +25,12 @@ Mask is usually considered to be odded in size so that it has a specific center 
 
 - #### Gaussian Filter:
 A Gaussian Filter is a low pass filter used for reducing noise and blurring regions of an image. The filter is implemented as an Odd sized Symmetric Kernel which is passed through each pixel of the Region of Interest to get the desired effect.
-<img src="Images/gaussian_filter.png" style="zoom:50%;" position="Center" />
+
+  <img src="Images/gaussian_filter.png" style="zoom:50%;" position="Center" />
 
 - #### Median Filter:
  It is used to eliminate salt and pepper noise. Here the pixel value is replaced by the median value of the neighboring pixel.
+
  <img src="Images/median_filter.png" style="zoom:50%;" position="Center" />
 
 
