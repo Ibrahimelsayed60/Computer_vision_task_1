@@ -391,6 +391,11 @@
                 <string>Hybrid image</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>Hybrid image in frequency domain</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>
@@ -425,7 +430,7 @@
      <x>0</x>
      <y>0</y>
      <width>1174</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

@@ -307,8 +307,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         b = [next(hist)]
         for i in hist:
             b.append(b[-1] + i)
-        # return np.array(b)
-        # pg.plot
+        
         b = np.array(b)
         nj = (b - b.min()) * 255
         N = b.max() - b.min()
@@ -328,19 +327,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         y=np.linspace(0,np.max(histogram))
         # return our final result
         return histogram
-        # my_img = pg.BarGraphItem(x=histogram,height=image_input.flatten(),width=0.6, brush='r')
-        # self.ui.widget.addItem(my_img)
-
-    # def equalized_histogram(self,cumulative_sum,image_in):
-    #     nj = (cumulative_sum - cumulative_sum.min()) * 255
-    #     N = cumulative_sum.max() - cumulative_sum.min()
-
-    #     # re-normalize the cdf
-    #     cs = nj / N
-    #     cs = cs.astype('uint8')
-
-
-
+        
 
     def histogram_selection(self):
         if self.ui.comboBox.currentIndex() == 5:
@@ -405,25 +392,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             gaussian_image = self.gaussian_filter(second_image)
             Hybrid_img = alpha * laplace_image + (1 - alpha) * gaussian_image
             return Hybrid_img
-            # img = np.array(Hybrid_img).reshape(self.img4.shape[1],self.img4.shape[0]).astype(np.uint8)
-            # img = QtGui.QImage(img, img.shape[0],img.shape[1],QtGui.QImage.Format_Grayscale8)
-        #     if self.ui.comboBox_4.currentIndex() == 3:
-        #         my_img = pg.ImageItem(Hybrid_img)
-        #         self.ui.widget_3.addItem(my_img)
+    
+    def Hybrid_image_frequency(self,first_image,second_image,alpha):
+        if first_image.shape[0] == second_image.shape[0] and first_image.shape[1] == second_image.shape[1]:
+            high_image = self.high_pass_filter(first_image)
+            low_image = self.low_pass_filter(second_image)
+            Hybrid_image = alpha * high_image + (1-alpha) * low_image
+        return Hybrid_image
 
-        #     elif self.ui.comboBox_4.currentIndex() == 2:
-        #         my_img = pg.ImageItem(first_image)
-        #         self.ui.widget_3.addItem(my_img)
-        #     elif self.ui.comboBox_4.currentIndex() == 1:
-        #         my_img = pg.ImageItem(second_image)
-        #         self.ui.widget_3.addItem(my_img)
-
-        # else:
-        #     pass
     def visualize_hybrid_image(self):
         if self.ui.comboBox_4.currentIndex() == 3:
             #self.ui.widget_3.clear()
             Hybrid_img = self.Hybrid_image(self.img4,self.img5,0.3)
+            my_img = pg.ImageItem(Hybrid_img)
+            self.ui.widget_3.addItem(my_img)
+
+        elif self.ui.comboBox_4.currentIndex() == 4:
+            Hybrid_img = self.Hybrid_image_frequency(self.img4,self.img5,0.3)
             my_img = pg.ImageItem(Hybrid_img)
             self.ui.widget_3.addItem(my_img)
 
