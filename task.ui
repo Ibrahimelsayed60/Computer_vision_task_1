@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1174</width>
+    <width>1255</width>
     <height>771</height>
    </rect>
   </property>
@@ -293,7 +293,23 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox_2"/>
+             <widget class="QComboBox" name="comboBox_2">
+              <item>
+               <property name="text">
+                <string>Original Histogram</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Equalized Image</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Normalized Image</string>
+               </property>
+              </item>
+             </widget>
             </item>
            </layout>
           </item>
@@ -429,7 +445,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1174</width>
+     <width>1255</width>
      <height>26</height>
     </rect>
    </property>

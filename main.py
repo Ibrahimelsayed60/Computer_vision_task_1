@@ -28,13 +28,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_4.getPlotItem().hideAxis('bottom')
         self.ui.widget_4.getPlotItem().hideAxis('left')
 
+        self.Histogram()
         self.ui.image1.setPixmap(QPixmap(path))
+        self.ui.comboBox_Image1_3.setEnabled(False)
         self.ui.comboBox_Image1.currentIndexChanged[int].connect(self.noisy_image)
         self.ui.comboBox_Image1_3.currentIndexChanged[int].connect(self.filtered_image)
         self.ui.comboBox_Image1_2.currentIndexChanged[int].connect(self.threshold_image)
         self.ui.comboBox.currentIndexChanged[int].connect(self.histogram_selection)
         self.ui.comboBox_4.currentIndexChanged[int].connect(self.visualize_hybrid_image)
         self.ui.comboBox_3.currentIndexChanged[int].connect(self.edge_detection_filter)
+        self.ui.comboBox_2.currentIndexChanged[int].connect(self.Histogram)
         #self.get_histogram(self.img3,256)
 
     def convolution(self, image, kernel, average=False, verbose=False):
@@ -57,19 +60,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return output
 
     # Add additive noise to the image
+    def uniform_noise(self, img):
+        gaussian = np.random.randn(img.shape[0], img.shape[1])
+        img = img + img*gaussian
+        return img
+
     def gaussian_noise(self, img):
         mean = 0
-        var = 10
+        var = 100
         sigma = var ** 0.5
         gaussian = np.random.normal(mean, sigma, (256, 256))
         new_img = np.zeros(img.shape, np.float32)
-        if len(img.shape) == 2:
-            new_img = img + gaussian
-        else:
-            new_img[:, :, 0] = img[:, :, 0] + gaussian
-            new_img[:, :, 1] = img[:, :, 1] + gaussian
-            new_img[:, :, 2] = img[:, :, 2] + gaussian
-        cv2.normalize(new_img, new_img, 0, 255, cv2.NORM_MINMAX, dtype=-1)
+        new_img = img + gaussian
         return new_img
 
     def salt_and_pepper_noise(self, img):
@@ -92,6 +94,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             x_coord=random.randint(0, col - 1)	          
             # Color that pixel to black
             img[y_coord][x_coord] = 0	          
+        self.img = cv2.imread('lena.jpg', 0)
         return img
     
     # Filter the noisy image using the low pass filters
@@ -132,10 +135,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return img_new
 
     def noisy_image(self):
+        self.ui.comboBox_Image1_3.setEnabled(True)
         if self.ui.comboBox_Image1.currentIndex() == 1:
-            self.image = self.gaussian_noise(self.img)
+        	self.image = self.uniform_noise(self.img)
         elif self.ui.comboBox_Image1.currentIndex() == 2:
-            self.image = self.salt_and_pepper_noise(self.img)
+        	self.image = self.gaussian_noise(self.img)
+        elif self.ui.comboBox_Image1.currentIndex() == 3:
+        	self.image = self.salt_and_pepper_noise(self.img)
         self.ui.image2.setPixmap(QPixmap(self.display(self.image)))
         self.filtered_image()
         
@@ -421,6 +427,56 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             my_img = pg.ImageItem(self.img5)
             self.ui.widget_3.addItem(my_img)
 
+#######################Histogram###########################    
+    def Histogram(self):
+    	self.ui.widget_5.clear()
+    	if self.ui.comboBox_2.currentIndex() == 0:
+    		hist =self.Hist(self.img)
+    		self.ui.widget_5.plot(hist.flatten())
+    	elif self.ui.comboBox_2.currentIndex() == 1:
+    		image = self.eqimage(self.img3)
+    		image = pg.ImageItem(image)
+    		self.ui.widget_5.addItem(image)
+    	elif self.ui.comboBox_2.currentIndex() == 2:
+    		norm = self.normalization(self.img3)
+    		norm = pg.ImageItem(norm)
+    		self.ui.widget_5.addItem(norm)
+    
+    def Hist(self,image):
+    	H = np.zeros(shape = (256,1))
+    	s = image.shape
+    	for i in range (s[0]):
+    		for j in range(s[1]):
+    			k=image[i,j]
+    			H[k,0]+=1
+    	return H
+
+    def eqimage(self,image):
+    	s = image.shape
+    	H = self.Hist(image)
+    	x = H.reshape(1,256)
+    	y = np.array([])
+    	y=np.append(y,x[0,0])
+    	for i in range (255):
+    		k = x[0,i+1]+y[i]
+    		y = np.append(y,k)
+    	y = np.round((y/(s[0]*s[1]))*255)
+    	for i in range(s[0]):
+    		for j in range (s[1]):
+    			k = image[i,j]
+    			image[i,j] = y[k]
+    	self.img3 = cv2.rotate(cv2.imread("lena.jpg",0),cv2.ROTATE_90_CLOCKWISE)
+    	return image
+
+    def eqHist(self,image):
+	    img = self.eqimage(image)
+	    eqhsit = self.Hist(img)
+	    return eqhsit
+
+    def normalization(self,Image):
+    	pixels = Image.astype('float32')
+    	pixels = pixels * (40/255) +10
+    	return pixels
 
 
 def main():
